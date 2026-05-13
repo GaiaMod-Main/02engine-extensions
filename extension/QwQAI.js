@@ -1,4 +1,5 @@
 class QwQAIExtension {
+	///Translated by Gaia
   constructor(runtime) {
     this.runtime = runtime;
     this.apiKey = "sk-W0rpStc95T7JVYVwDYc29IyirjtpPPby6SozFMQr17m8KWeo";
@@ -9,16 +10,16 @@ class QwQAIExtension {
   getInfo() {
     return {
       id: "qwqai",
-      name: "QwQ AI大模型",
+      name: "QwQ AI",
       blocks: [
         {
           opcode: "sendChat",
           blockType: Scratch.BlockType.REPORTER,
-          text: "发送消息 [MESSAGE] 使用模型 [MODEL]",
+          text: "Message [MESSAGE] Model used [MODEL]",
           arguments: {
             MESSAGE: {
               type: Scratch.ArgumentType.STRING,
-              defaultValue: "如何看待人的一生"
+              defaultValue: "What did you think of 02Engine?"
             },
             MODEL: {
               type: Scratch.ArgumentType.STRING,
@@ -29,7 +30,7 @@ class QwQAIExtension {
         {
           opcode: "setAPIKey",
           blockType: Scratch.BlockType.COMMAND,
-          text: "设置API密钥为 [KEY]",
+          text: "Set API key: [KEY]",
           arguments: {
             KEY: {
               type: Scratch.ArgumentType.STRING,
@@ -40,7 +41,7 @@ class QwQAIExtension {
         {
           opcode: "setAPIUrl",
           blockType: Scratch.BlockType.COMMAND,
-          text: "设置API地址为 [URL]",
+          text: "Set API URL: [URL]",
           arguments: {
             URL: {
               type: Scratch.ArgumentType.STRING,
@@ -51,7 +52,7 @@ class QwQAIExtension {
         {
           opcode: "setDefaultModel",
           blockType: Scratch.BlockType.COMMAND,
-          text: "设置默认模型为 [MODEL]",
+          text: "Set default model: [MODEL]",
           arguments: {
             MODEL: {
               type: Scratch.ArgumentType.STRING,
@@ -66,9 +67,16 @@ class QwQAIExtension {
           items: [
             "free:QwQ-32B",
             "gpt-3.5-turbo",
+            "gpt-5.2-chat-latest",
             "gpt-4",
             "claude-2",
-            "其他模型"
+            "gemini-2.0-flash",
+            "gemini-2.5-flash-lite",
+            "deepseek-math-7b-instruct",
+            "deepseek-coder-6.7b-instruct-awq",
+            "deepseek-coder-6.7b-base-awq",
+            "llama-3.1-8b-instruct-fast",
+            "Other models"
           ]
         }
       }
@@ -117,14 +125,14 @@ class QwQAIExtension {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error?.message || `API请求失败: ${response.status}`);
+        throw new Error(errorData.error?.message || `API request failed: ${response.status}`);
       }
 
       const data = await response.json();
-      return data.choices[0]?.message?.content || "未收到响应";
+      return data.choices[0]?.message?.content || "You have not received a message yet";
     } catch (error) {
-      console.error("调用API出错:", error);
-      return `错误: ${error.message}`;
+      console.error("Tuning API output:", error);
+      return `Error: ${error.message}`;
     }
   }
 }
