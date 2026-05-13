@@ -144,7 +144,7 @@ class Utils {
     document.head.appendChild(style);
   }
 
-  static parsePluginSettingsSchema(schema) {
+  static parseExtensionSettingsSchema(schema) {
     if (!Array.isArray(schema)) return [];
     const out = [];
     for (const item of schema) {
@@ -360,7 +360,7 @@ class APIManager {
       if (CacheManager.instance) CacheManager.instance.set(url, data);
       return data;
     } catch (error) {
-      throw new Error(`API请求失败: ${error.message}`);
+      throw new Error(`API Request Failed: ${error.message}`);
     }
   }
 
@@ -371,7 +371,7 @@ class APIManager {
         ...this.headers
       }
     });
-    if (!res.ok) throw new Error(`请求失败: ${res.status}`);
+    if (!res.ok) throw new Error(`Request Failed: ${res.status}`);
     return await res.text();
   }
 
@@ -437,7 +437,7 @@ class APIManager {
         ref: branch
       })
     });
-    if (!res.ok) throw new Error(`触发失败: ${res.status}`);
+    if (!res.ok) throw new Error(`Trigger Failed: ${res.status}`);
   }
 
   async mergeBranch(owner, repo, base, head, message) {
@@ -534,7 +534,7 @@ class AIManager {
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`API 错误 (${response.status}): ${errorText.slice(0, 100)}`);
+        throw new Error(`API failed (${response.status}): ${errorText.slice(0, 100)}`);
       }
 
       const reader = response.body.getReader();
@@ -566,7 +566,7 @@ class AIManager {
                 onChunk(content);
               }
             } catch (e) {
-              console.warn('解析流式数据失败:', e);
+              console.warn('Failed to parse streaming data.:', e);
             }
           }
         }
@@ -618,7 +618,7 @@ class AIManager {
       };
     } else if (this.provider === 'custom') {
       if (!this.config.customAI.url || !this.config.customAI.key) {
-        throw new Error('自定义 AI URL 或 Key 未设置');
+        throw new Error('Custom AI URL or Key is not set.');
       }
       return {
         url: this.config.customAI.url,
@@ -633,11 +633,11 @@ class AIManager {
         }
       };
     }
-    throw new Error('未知的AI提供商');
+    throw new Error('Unknown AI Provider');
   }
 
   async translate(text, model) {
-    if (!this.config.siliconKey) throw new Error('硅基流动 Key 未设置');
+    if (!this.config.siliconKey) throw new Error('Silicon-based Flow Key Not Set');
 
     const messages = [{
       role: 'system',
@@ -662,20 +662,20 @@ class AIManager {
 
     if (!res.ok) {
       const errText = await res.text();
-      throw new Error(`翻译API错误 (${res.status}): ${errText}`);
+      throw new Error(`Translation API Error (${res.status}): ${errText}`);
     }
 
     const data = await res.json();
     if (data.choices && data.choices[0]) {
       return data.choices[0].message.content;
     }
-    throw new Error('翻译返回格式错误');
+    throw new Error('Translation returned in an incorrect format.');
   }
 
   async generateIntro(repoName, desc, model) {
-    if (!this.config.siliconKey) throw new Error('硅基流动 Key 未设置');
+    if (!this.config.siliconKey) throw new Error('Silicon-based Flow Key Not Set');
 
-    const prompt = `请简要介绍 GitHub 仓库 "${repoName}"。描述: "${desc || ''}"。请用中文总结它的主要功能和用途。`;
+    const prompt = `Please briefly introduce GitHub repositories. "${repoName}"describe: "${desc || ''}"Please summarize its main functions and uses in English.`;
     const res = await fetch('https://api.siliconflow.cn/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -692,13 +692,13 @@ class AIManager {
       })
     });
 
-    if (!res.ok) throw new Error(`Intro API错误: ${res.status}`);
+    if (!res.ok) throw new Error(`Intro API failed: ${res.status}`);
 
     const data = await res.json();
     if (data.choices && data.choices[0]) {
       return data.choices[0].message.content;
     }
-    throw new Error('Intro返回格式错误');
+    throw new Error('Intro Invalid Return Format');
   }
 }
 
@@ -901,7 +901,7 @@ class UIComponents {
       margin: '8px 0',
       minHeight: '1.2em'
     });
-    status.textContent = '就绪';
+    status.textContent = 'Ready';
     return status;
   }
 
@@ -1105,7 +1105,7 @@ class UIComponents {
   opacity: 0.85;
 }
 
-/* plugin panel scroll */
+/* Extension panel scroll */
 .gpp-scrollable{
   overflow:auto !important;
   scrollbar-width: thin;
@@ -1131,15 +1131,15 @@ class UIComponents {
   background: rgba(255,255,255,0.05);
 }
 
-/* plugin settings */
-.gpp-plugin-card{
+/* Extension settings */
+.gpp-Extension-card{
   border:1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.03);
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;
 }
-.gpp-plugin-settings{
+.gpp-Extension-settings{
   margin-top:10px;
   border-top:1px solid rgba(255,255,255,0.08);
   padding-top:10px;
@@ -1147,29 +1147,29 @@ class UIComponents {
   flex-direction:column;
   gap:8px;
 }
-.gpp-plugin-setting-row{
+.gpp-Extension-setting-row{
   display:flex;
   flex-direction:column;
   gap:4px;
 }
-.gpp-plugin-setting-row label{
+.gpp-Extension-setting-row label{
   font-size:11px;
   opacity:0.75;
 }
-.gpp-plugin-setting-row input,
-.gpp-plugin-setting-row select{
+.gpp-Extension-setting-row input,
+.gpp-Extension-setting-row select{
   background: rgba(0,0,0,0.3);
   border: 1px solid #555;
   color: #fff;
   padding: 6px;
   border-radius: 6px;
 }
-.gpp-plugin-setting-inline{
+.gpp-Extension-setting-inline{
   display:flex;
   align-items:center;
   gap:8px;
 }
-.gpp-plugin-setting-inline span{
+.gpp-Extension-setting-inline span{
   font-size:12px;
   min-width:50px;
 }
@@ -1179,12 +1179,12 @@ class UIComponents {
 }
 
 // 插件管理模块
-class PluginManager {
+class ExtensionManager {
   constructor(extension) {
     this.extension = extension;
-    this.plugins = new Map();
+    this.Extensions = new Map();
     this.hooks = new Map();
-    this.pluginSettings = new Map();
+    this.ExtensionSettings = new Map();
     this._loadFromStorage();
   }
 
@@ -1194,13 +1194,13 @@ class PluginManager {
     const api = core.apiManager;
     const manager = this;
 
-    const pluginAPI = {
+    const ExtensionAPI = {
       // 基础
       version: '2.0.0',
       alert: (msg) => alert(msg),
       confirm: (msg) => confirm(msg),
       prompt: (msg, def = '') => prompt(msg, def),
-      log: (...args) => console.log('[PluginAPI]', ...args),
+      log: (...args) => console.log('[ExtensionAPI]', ...args),
 
       // UI / 核心
       showPanel: () => ext.showPanel(),
@@ -1286,26 +1286,26 @@ class PluginManager {
       },
 
       // 插件系统
-      plugins: {
-        list: () => Array.from(manager.plugins.values()).map(p => ({
+      Extensions: {
+        list: () => Array.from(manager.Extensions.values()).map(p => ({
           id: p.id,
           name: p.name,
           version: p.version
         })),
-        get: (id) => manager.plugins.get(id),
-        unload: (id) => manager.unloadPlugin(id),
+        get: (id) => manager.Extensions.get(id),
+        unload: (id) => manager.unloadExtension(id),
         trigger: (hook, data) => manager.trigger(hook, data),
         importFromGitHub: async (url) => await manager.importFromGitHub(url),
-        loadCode: async (code, id = null, save = true) => await manager.loadPlugin(code, id, save)
+        loadCode: async (code, id = null, save = true) => await manager.loadExtension(code, id, save)
       },
 
       // 参数系统
       settings: {
-        getAll: (pluginId) => manager.getPluginSettings(pluginId),
-        get: (pluginId, key, def = null) => manager.getPluginSetting(pluginId, key, def),
-        set: (pluginId, key, value) => manager.setPluginSetting(pluginId, key, value),
-        ownAll: (pluginId) => manager.getPluginSettings(pluginId),
-        ownGet: (pluginId, key, def = null) => manager.getPluginSetting(pluginId, key, def)
+        getAll: (ExtensionId) => manager.getExtensionSettings(ExtensionId),
+        get: (ExtensionId, key, def = null) => manager.getExtensionSetting(ExtensionId, key, def),
+        set: (ExtensionId, key, value) => manager.setExtensionSetting(ExtensionId, key, value),
+        ownAll: (ExtensionId) => manager.getExtensionSettings(ExtensionId),
+        ownGet: (ExtensionId, key, def = null) => manager.getExtensionSetting(ExtensionId, key, def)
       },
 
       // 一般工具
@@ -1318,11 +1318,11 @@ class PluginManager {
       },
       createPanelCard: (title, html = '') => {
         const d = document.createElement('div');
-        d.className = 'gpp-plugin-card';
+        d.className = 'gpp-Extension-card';
         d.innerHTML = `<div style="font-weight:700;margin-bottom:8px">${title}</div>${html}`;
         return d;
       },
-      createModal: (title = '插件窗口') => {
+      createModal: (title = 'Extension Window') => {
         const overlay = document.createElement('div');
         Object.assign(overlay.style, {
           position: 'fixed',
@@ -1397,7 +1397,7 @@ class PluginManager {
       components: UIComponents,
       extension: ext,
       manager: this,
-      pluginAPI
+      ExtensionAPI
     };
   }
 
@@ -1406,18 +1406,18 @@ class PluginManager {
       const saved = localStorage.getItem('github_panel_storage');
       if (saved) {
         const data = JSON.parse(saved);
-        if (data.plugins) {
-          data.plugins.forEach(p => {
-            if (p.enabled) this.loadPlugin(p.code, p.id, false);
+        if (data.Extensions) {
+          data.Extensions.forEach(p => {
+            if (p.enabled) this.loadExtension(p.code, p.id, false);
           });
         }
         if (data.token) {
           this.extension.core.token = data.token;
           this.extension.core.updateAIConfig();
         }
-        if (data.pluginSettings) {
-          Object.entries(data.pluginSettings).forEach(([id, vals]) => {
-            this.pluginSettings.set(id, vals || {});
+        if (data.ExtensionSettings) {
+          Object.entries(data.ExtensionSettings).forEach(([id, vals]) => {
+            this.ExtensionSettings.set(id, vals || {});
           });
         }
       }
@@ -1428,7 +1428,7 @@ class PluginManager {
 
   _saveToStorage() {
     const list = [];
-    this.plugins.forEach((p, id) => {
+    this.Extensions.forEach((p, id) => {
       list.push({
         id,
         code: p.code,
@@ -1436,24 +1436,24 @@ class PluginManager {
       });
     });
     const settingsObj = {};
-    this.pluginSettings.forEach((v, k) => {
+    this.ExtensionSettings.forEach((v, k) => {
       settingsObj[k] = v;
     });
     const data = {
       token: this.extension.core.token,
-      plugins: list,
-      pluginSettings: settingsObj
+      Extensions: list,
+      ExtensionSettings: settingsObj
     };
     localStorage.setItem('github_panel_storage', JSON.stringify(data));
   }
 
-  _normalizePluginAPI(plugin) {
-    const schemaRaw = plugin.API || plugin.api || plugin.params || plugin.settingsSchema || [];
-    const schema = Utils.parsePluginSettingsSchema(schemaRaw);
-    plugin._settingsSchema = schema;
+  _normalizeExtensionAPI(Extension) {
+    const schemaRaw = Extension.API || Extension.api || Extension.params || Extension.settingsSchema || [];
+    const schema = Utils.parseExtensionSettingsSchema(schemaRaw);
+    Extension._settingsSchema = schema;
 
-    if (!this.pluginSettings.has(plugin.id)) this.pluginSettings.set(plugin.id, {});
-    const values = this.pluginSettings.get(plugin.id);
+    if (!this.ExtensionSettings.has(Extension.id)) this.ExtensionSettings.set(Extension.id, {});
+    const values = this.ExtensionSettings.get(Extension.id);
 
     schema.forEach(item => {
       if (!(item.key in values)) {
@@ -1461,57 +1461,57 @@ class PluginManager {
       }
     });
 
-    plugin.getSetting = (key, def = null) => this.getPluginSetting(plugin.id, key, def);
-    plugin.setSetting = (key, value) => this.setPluginSetting(plugin.id, key, value);
-    plugin.getSettings = () => this.getPluginSettings(plugin.id);
+    Extension.getSetting = (key, def = null) => this.getExtensionSetting(Extension.id, key, def);
+    Extension.setSetting = (key, value) => this.setExtensionSetting(Extension.id, key, value);
+    Extension.getSettings = () => this.getExtensionSettings(Extension.id);
 
-    this.pluginSettings.set(plugin.id, values);
+    this.ExtensionSettings.set(Extension.id, values);
   }
 
-  getPluginSettings(id) {
+  getExtensionSettings(id) {
     return {
-      ...(this.pluginSettings.get(id) || {})
+      ...(this.ExtensionSettings.get(id) || {})
     };
   }
 
-  getPluginSetting(id, key, def = null) {
-    const data = this.pluginSettings.get(id) || {};
+  getExtensionSetting(id, key, def = null) {
+    const data = this.ExtensionSettings.get(id) || {};
     return key in data ? data[key] : def;
   }
 
-  setPluginSetting(id, key, value) {
-    const data = this.pluginSettings.get(id) || {};
+  setExtensionSetting(id, key, value) {
+    const data = this.ExtensionSettings.get(id) || {};
     data[key] = value;
-    this.pluginSettings.set(id, data);
+    this.ExtensionSettings.set(id, data);
     this._saveToStorage();
-    this.trigger('plugin:settings:change', {
-      pluginId: id,
+    this.trigger('Extension:settings:change', {
+      ExtensionId: id,
       key,
       value,
       values: { ...data }
     });
-    const plugin = this.plugins.get(id);
-    if (plugin && typeof plugin.onSettingsChange === 'function') {
+    const Extension = this.Extensions.get(id);
+    if (Extension && typeof Extension.onSettingsChange === 'function') {
       try {
-        plugin.onSettingsChange(key, value, { ...data }, this.context);
+        Extension.onSettingsChange(key, value, { ...data }, this.context);
       } catch (e) {
-        console.error(`Plugin ${id} settings change error:`, e);
+        console.error(`Extension ${id} settings change error:`, e);
       }
     }
   }
 
-  async loadPlugin(code, id = null, save = true) {
+  async loadExtension(code, id = null, save = true) {
     if (save) {
-      const warnMsg = "【安全警告】\n将加载外部插件！\n插件 API 系统已 100% 暴露内部核心权限 (Token, 网络请求, 弹窗控制等)。\n继续加载未知插件可能导致数据损坏或隐私泄露。\n出现问题概不负责！\n\n确定要继续加载吗？";
+      const warnMsg = "[Security Warning] External Extensions are about to be loaded! The Extension API system exposes 100% of internal core privileges (including Tokens, network requests, window controls, etc.). Continuing to load unknown Extensions may result in data corruption or privacy breaches. We accept no responsibility for any issues that may arise! \nAre you sure you wish to proceed with loading?";
       if (!confirm(warnMsg)) return;
     }
 
     try {
-      const pluginFactory = new Function('context', `
-       const { core, ui, api, utils, components, extension, manager, pluginAPI } = context;
-       const plugin = {
+      const ExtensionFactory = new Function('context', `
+       const { core, ui, api, utils, components, extension, manager, ExtensionAPI } = context;
+       const Extension = {
          id: "${id || 'temp-' + Date.now()}",
-         name: "Unknown Plugin",
+         name: "Unknown Extension",
          version: "0.0.1",
          init: () => {},
          onHook: () => {},
@@ -1520,52 +1520,52 @@ class PluginManager {
          API: []
        };
        ${code}
-       return plugin;
+       return Extension;
      `);
 
-      const plugin = pluginFactory(this.context);
-      if (!plugin.id) throw new Error('Plugin must have an ID');
+      const Extension = ExtensionFactory(this.context);
+      if (!Extension.id) throw new Error('Extension must have an ID');
 
-      if (plugin.style) {
+      if (Extension.style) {
         const style = document.createElement('style');
-        style.id = `plugin-style-${plugin.id}`;
-        style.textContent = plugin.style;
+        style.id = `Extension-style-${Extension.id}`;
+        style.textContent = Extension.style;
         document.head.appendChild(style);
-        plugin._styleEl = style;
+        Extension._styleEl = style;
       }
 
-      this._normalizePluginAPI(plugin);
+      this._normalizeExtensionAPI(Extension);
 
-      if (plugin.init) plugin.init(this.context);
+      if (Extension.init) Extension.init(this.context);
 
-      plugin.code = code;
-      this.plugins.set(plugin.id, plugin);
+      Extension.code = code;
+      this.Extensions.set(Extension.id, Extension);
       if (save) this._saveToStorage();
 
-      console.log(`Plugin loaded: ${plugin.name} (${plugin.id})`);
-      return plugin;
+      console.log(`Extension loaded: ${Extension.name} (${Extension.id})`);
+      return Extension;
     } catch (e) {
-      ErrorHandler.handle(e, '加载插件');
+      ErrorHandler.handle(e, 'Load Extension');
       throw e;
     }
   }
 
-  unloadPlugin(id) {
-    const p = this.plugins.get(id);
+  unloadExtension(id) {
+    const p = this.Extensions.get(id);
     if (!p) return;
     if (p._styleEl) p._styleEl.remove();
-    this.plugins.delete(id);
+    this.Extensions.delete(id);
     this._saveToStorage();
-    console.log(`Plugin unloaded: ${id}`);
+    console.log(`Extension unloaded: ${id}`);
   }
 
   trigger(hookName, data) {
-    this.plugins.forEach(p => {
+    this.Extensions.forEach(p => {
       if (p.onHook) {
         try {
           p.onHook(hookName, data, this.context);
         } catch (e) {
-          console.error(`Plugin ${p.id} hook error:`, e);
+          console.error(`Extension ${p.id} hook error:`, e);
         }
       }
     });
@@ -1580,17 +1580,17 @@ class PluginManager {
         if (path.endsWith('.js')) {
           targetUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
         } else {
-          targetUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path.replace(/\/$/, '')}/plugin.js`;
+          targetUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path.replace(/\/$/, '')}/Extension.js`;
         }
       }
     }
 
-    LoadingManager.setMessage(`Fetching plugin from ${targetUrl}...`);
+    LoadingManager.setMessage(`Fetching Extension from ${targetUrl}...`);
     const res = await fetch(targetUrl);
-    if (!res.ok) throw new Error(`Failed to fetch plugin: ${res.status}`);
+    if (!res.ok) throw new Error(`Failed to fetch Extension: ${res.status}`);
     const code = await res.text();
-    await this.loadPlugin(code);
-    LoadingManager.setMessage('Plugin imported successfully.');
+    await this.loadExtension(code);
+    LoadingManager.setMessage('Extension imported successfully.');
   }
 }
 
@@ -1645,7 +1645,7 @@ class GitHubPanelCore {
       owner: "13244431027",
       repo: "3",
       branch: "main",
-      dir: "me/github/插件",
+      dir: "me/github/Extensions",
       items: [],
       lastLoadedAt: 0
     };
@@ -1677,7 +1677,7 @@ class GitHubPanelCore {
   setToken(token) {
     this.token = token;
     this.updateAIConfig();
-    this.pluginManager._saveToStorage();
+    this.ExtensionManager._saveToStorage();
   }
 
   setAIProvider(provider) {
@@ -1712,26 +1712,26 @@ class GitHubPanelExtension {
       marketplace: null
     };
     this.virtualScrollers = new Map();
-    this.pluginManager = new PluginManager(this);
-    this.core.pluginManager = this.pluginManager;
+    this.ExtensionManager = new ExtensionManager(this);
+    this.core.ExtensionManager = this.ExtensionManager;
   }
 
   getInfo() {
     return {
       id: 'githubpanel',
-      name: 'GitHub 面板 Pro+',
+      name: 'GitHub panel Pro+',
       blocks: [{
         opcode: 'showPanel',
         blockType: Scratch.BlockType.COMMAND,
-        text: '显示面板'
+        text: 'Display Panel'
       }, {
         opcode: 'hidePanel',
         blockType: Scratch.BlockType.COMMAND,
-        text: '隐藏面板'
+        text: 'Hide Panel'
       }, {
         opcode: 'setToken',
         blockType: Scratch.BlockType.COMMAND,
-        text: 'GitHub 令牌为 [TOKEN]',
+        text: 'GitHub token: [TOKEN]',
         arguments: {
           TOKEN: {
             type: Scratch.ArgumentType.STRING,
@@ -1741,7 +1741,7 @@ class GitHubPanelExtension {
       }, {
         opcode: 'setAIProvider',
         blockType: Scratch.BlockType.COMMAND,
-        text: '设置 AI 提供商为 [PROVIDER]',
+        text: 'Set AI Provider to [PROVIDER]',
         arguments: {
           PROVIDER: {
             type: Scratch.ArgumentType.STRING,
@@ -1752,7 +1752,7 @@ class GitHubPanelExtension {
       }, {
         opcode: 'setSiliconKey',
         blockType: Scratch.BlockType.COMMAND,
-        text: '硅基流动 Key 为 [KEY]',
+        text: 'The Silicon-based Flow Key is [KEY]',
         arguments: {
           KEY: {
             type: Scratch.ArgumentType.STRING,
@@ -1762,7 +1762,7 @@ class GitHubPanelExtension {
       }, {
         opcode: 'setSiliconTranslator',
         blockType: Scratch.BlockType.COMMAND,
-        text: '硅基翻译插件 [STATE] 模型 [MODEL]',
+        text: 'Silicon-based Translation Extension [STATE] Model [MODEL]',
         arguments: {
           STATE: {
             type: Scratch.ArgumentType.STRING,
@@ -1783,20 +1783,20 @@ class GitHubPanelExtension {
             text: 'GitHub',
             value: 'github'
           }, {
-            text: '硅基流动',
+            text: 'Silicon Flow',
             value: 'siliconflow'
           }, {
-            text: '自定义',
+            text: 'Custom',
             value: 'custom'
           }]
         },
         onOff: {
           acceptReporters: true,
           items: [{
-            text: '开启',
+            text: 'On',
             value: 'on'
           }, {
-            text: '关闭',
+            text: 'Off',
             value: 'off'
           }]
         },
@@ -1832,7 +1832,7 @@ class GitHubPanelExtension {
     this.core.panelMode = 'normal';
     this._applyPanelMode();
     this._switchMode(this.core.mode);
-    this.pluginManager.trigger('ui:show');
+    this.ExtensionManager.trigger('ui:show');
   }
 
   hidePanel() {
@@ -1845,12 +1845,12 @@ class GitHubPanelExtension {
     this._closeMarketplace();
     this.virtualScrollers.forEach(vs => vs.destroy());
     this.virtualScrollers.clear();
-    this.pluginManager.trigger('ui:hide');
+    this.ExtensionManager.trigger('ui:hide');
   }
 
   setToken(args) {
     this.core.setToken(String(args.TOKEN || '').trim());
-    LoadingManager.setMessage(this.core.token ? 'GitHub Token 已设置' : '未设置 Token');
+    LoadingManager.setMessage(this.core.token ? 'GitHub Token Set : Not Set Token');
   }
 
   setAIProvider(args) {
@@ -1863,7 +1863,7 @@ class GitHubPanelExtension {
 
   setSiliconTranslator(args) {
     this.core.setSiliconTranslator(args.STATE, args.MODEL);
-    LoadingManager.setMessage(`硅基翻译: ${this.core.sfTranslateEnabled ? '开' : '关'} (${this.core.sfTranslateModel})`);
+    LoadingManager.setMessage(`Silicon-based Translation: ${this.core.sfTranslateEnabled ? 'open' : 'close'} (${this.core.sfTranslateModel})`);
   }
 
   // ==================== UI创建 ====================
@@ -1876,7 +1876,7 @@ class GitHubPanelExtension {
     const {
       header,
       winCtrls
-    } = UIComponents.createHeader('GitHub 面板 Pro+');
+    } = UIComponents.createHeader('GitHub panel Pro+');
     this.ui.header = header;
 
     const minBtn = UIComponents.createWindowButton('_', {
@@ -1949,21 +1949,21 @@ class GitHubPanelExtension {
     resizeObserver.observe(this.ui.panel);
 
     this.ui.tabs = UIComponents.createTabs();
-    this.ui.tabSearchBtn = UIComponents.createTabButton('搜索', true);
-    this.ui.tabBrowseBtn = UIComponents.createTabButton('浏览');
-    this.ui.tabTrendingBtn = UIComponents.createTabButton('推荐');
-    this.ui.tabMyBtn = UIComponents.createTabButton('我的');
+    this.ui.tabSearchBtn = UIComponents.createTabButton('Search', true);
+    this.ui.tabBrowseBtn = UIComponents.createTabButton('Browse');
+    this.ui.tabTrendingBtn = UIComponents.createTabButton('Recommend');
+    this.ui.tabMyBtn = UIComponents.createTabButton('Mine');
     this.ui.tabAIBtn = UIComponents.createTabButton('AI');
-    this.ui.tabPluginsBtn = UIComponents.createTabButton('🧩 插件');
+    this.ui.tabExtensionsBtn = UIComponents.createTabButton('🧩 Extensions');
 
-    const marketplaceBtn = UIComponents.createWindowButton("插件集市", {
+    const marketplaceBtn = UIComponents.createWindowButton("Extension Marketplace", {
       background: "rgba(160,120,255,0.22)",
       border: "1px solid rgba(160,120,255,0.28)",
       borderRadius: "10px"
     });
     marketplaceBtn.onclick = () => this._openMarketplace();
 
-    const dirSel = Utils.select(['repo', 'user', 'org'], '搜索方向');
+    const dirSel = Utils.select(['repo', 'user', 'org'], 'Search Direction');
     Object.assign(dirSel.el.style, {
       marginLeft: 'auto',
       minWidth: '180px'
@@ -1975,7 +1975,7 @@ class GitHubPanelExtension {
     this.ui.tabs.appendChild(this.ui.tabTrendingBtn);
     this.ui.tabs.appendChild(this.ui.tabMyBtn);
     this.ui.tabs.appendChild(this.ui.tabAIBtn);
-    this.ui.tabs.appendChild(this.ui.tabPluginsBtn);
+    this.ui.tabs.appendChild(this.ui.tabExtensionsBtn);
     this.ui.tabs.appendChild(marketplaceBtn);
     this.ui.tabs.appendChild(dirSel.el);
 
@@ -1987,7 +1987,7 @@ class GitHubPanelExtension {
     this.ui.aiArea = this._createAIArea();
     this.ui.trendingArea = this._createTrendingArea();
     this.ui.myArea = this._createMyArea();
-    this.ui.pluginsArea = this._createPluginsArea();
+    this.ui.ExtensionsArea = this._createExtensionsArea();
 
     this.ui.statusLabel = UIComponents.createStatusLabel();
     LoadingManager.init(this.ui.statusLabel);
@@ -2019,7 +2019,7 @@ class GitHubPanelExtension {
     bodyWrap.appendChild(this.ui.aiArea);
     bodyWrap.appendChild(this.ui.trendingArea);
     bodyWrap.appendChild(this.ui.myArea);
-    bodyWrap.appendChild(this.ui.pluginsArea);
+    bodyWrap.appendChild(this.ui.ExtensionsArea);
     bodyWrap.appendChild(this.ui.statusLabel);
     bodyWrap.appendChild(this.ui.mainArea);
 
@@ -2033,7 +2033,7 @@ class GitHubPanelExtension {
     this._createMarketplaceUI();
 
     this._bindEvents();
-    this.pluginManager.trigger('ui:ready', this.ui);
+    this.ExtensionManager.trigger('ui:ready', this.ui);
   }
 
   // ==================== Marketplace Logic Integration ====================
@@ -2055,22 +2055,22 @@ class GitHubPanelExtension {
     titlebar.className = "pmk2-titlebar";
 
     const title = document.createElement("div");
-    title.innerHTML = `<div class="pmk2-title">插件集市</div><div class="pmk2-subtitle">从 GitHub 目录加载 .js（自动忽略 README.md）</div>`;
+    title.innerHTML = `<div class="pmk2-title">Extension Marketplace</div><div class="pmk2-subtitle">从 GitHub Load directory .js (README.md is automatically ignored)）</div>`;
 
     const spacer = document.createElement("div");
     spacer.className = "pmk2-spacer";
 
     const btnReload = document.createElement("button");
     btnReload.className = "pmk2-btn pmk2-btn-blue";
-    btnReload.textContent = "刷新";
+    btnReload.textContent = "refresh";
 
     const btnOpenDir = document.createElement("button");
     btnOpenDir.className = "pmk2-btn";
-    btnOpenDir.textContent = "打开目录";
+    btnOpenDir.textContent = "Open Directory";
 
     const btnClose = document.createElement("button");
     btnClose.className = "pmk2-btn pmk2-btn-danger";
-    btnClose.textContent = "关闭";
+    btnClose.textContent = "close";
 
     titlebar.appendChild(title);
     titlebar.appendChild(spacer);
@@ -2091,27 +2091,27 @@ class GitHubPanelExtension {
     const fOwner = this._createMarketField("Owner", mkState.owner);
     const fRepo = this._createMarketField("Repo", mkState.repo);
     const fBranch = this._createMarketField("Branch", mkState.branch);
-    const fDir = this._createMarketField("目录 Path", mkState.dir);
+    const fDir = this._createMarketField("Table of contents Path", mkState.dir);
 
     const hint = document.createElement("div");
     hint.className = "pmk2-hint";
     hint.innerHTML = `
-    规则：<span class="pmk2-kbd">只加载 .js</span>，并且<span class="pmk2-kbd">忽略 README.md</span>。<br>
-    安装时会调用扩展自带的“加载插件”流程（会弹出安全确认）。<br>
-    如果仓库不是公开的，或分支不对，会读取失败。
+    Rule：<span class="pmk2-kbd">It loads only .js files and ignores README.md.<br>
+During installation, the extension's built-in "Load Extension" process is invoked (which triggers a security confirmation prompt).<br>
+If the repository is not public, or if the specified branch is incorrect, the loading process will fail.
   `;
 
     const status = document.createElement("div");
     status.className = "pmk2-status";
-    status.textContent = "未加载";
+    status.textContent = "Not Loaded";
 
     const btnSaveCfg = document.createElement("button");
     btnSaveCfg.className = "pmk2-btn";
-    btnSaveCfg.textContent = "应用配置";
+    btnSaveCfg.textContent = "Application Configuration";
 
     const btnLoad = document.createElement("button");
     btnLoad.className = "pmk2-btn pmk2-btn-blue";
-    btnLoad.textContent = "加载列表";
+    btnLoad.textContent = "Loading List";
 
     left.appendChild(fOwner.wrap);
     left.appendChild(fRepo.wrap);
@@ -2166,7 +2166,7 @@ class GitHubPanelExtension {
       state.repo = inputs.repo.value.trim() || state.repo;
       state.branch = inputs.branch.value.trim() || state.branch;
       state.dir = inputs.dir.value.trim().replace(/^\/+|\/+$/g, "") || state.dir;
-      this._setMarketplaceStatus("配置已应用（未加载）");
+      this._setMarketplaceStatus("Configuration Applied (Not Loaded)");
     };
 
     btnLoad.onclick = () => {
@@ -2268,13 +2268,13 @@ class GitHubPanelExtension {
       branch,
       dir
     } = this.core.marketplaceState;
-    this._setMarketplaceStatus(`加载中：${owner}/${repo}@${branch}/${dir}`);
+    this._setMarketplaceStatus(`loading：${owner}/${repo}@${branch}/${dir}`);
     this._renderMarketListLoading();
 
     try {
       const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(dir)}?ref=${encodeURIComponent(branch)}`;
       const items = await this.core.apiManager.fetchJson(url);
-      if (!Array.isArray(items)) throw new Error("目标不是目录或无法读取");
+      if (!Array.isArray(items)) throw new Error("The target is not a directory or is unreadable.");
 
       const jsFiles = items
         .filter((it) => it && it.type === "file")
@@ -2289,17 +2289,17 @@ class GitHubPanelExtension {
       this.core.marketplaceState.lastLoadedAt = Date.now();
 
       this._renderMarketList();
-      this._setMarketplaceStatus(`已加载：${jsFiles.length} 个 .js（已忽略 README.md）`);
+      this._setMarketplaceStatus(`Loaded：${jsFiles.length} 个 .js（Ignore README.md）`);
     } catch (e) {
       this._renderMarketError(e);
-      this._setMarketplaceStatus(`加载失败：${e.message || e}`);
+      this._setMarketplaceStatus(`Loading failed：${e.message || e}`);
     }
   }
 
   _renderMarketListLoading() {
     const list = this.ui.marketplace.list;
     if (!list) return;
-    list.innerHTML = `<div class="pmk2-empty">正在加载列表...</div>`;
+    list.innerHTML = `<div class="pmk2-empty">Loading list......</div>`;
   }
 
   _renderMarketError(e) {
@@ -2307,9 +2307,9 @@ class GitHubPanelExtension {
     if (!list) return;
     list.innerHTML = `
     <div class="pmk2-empty">
-      读取失败：${String(e.message || e).replace(/</g, "&lt;")}
+      Read failed：${String(e.message || e).replace(/</g, "&lt;")}
       <div style="margin-top:8px;opacity:0.7">
-        建议检查：分支是否正确、目录路径是否存在、仓库是否公开、或是否触发 GitHub API 频率限制。
+        Suggested checks: Verify that the branch is correct, the directory path exists, the repository is public, or that you have triggered GitHub API rate limits.
       </div>
     </div>
   `;
@@ -2328,7 +2328,7 @@ class GitHubPanelExtension {
     list.innerHTML = "";
 
     if (items.length === 0) {
-      list.innerHTML = `<div class="pmk2-empty">目录中没有可用的 .js 插件文件。</div>`;
+      list.innerHTML = `<div class="pmk2-empty">No available .js Extension files found in the directory.。</div>`;
       return;
     }
 
@@ -2361,18 +2361,18 @@ class GitHubPanelExtension {
 
       const btnInstall = document.createElement("button");
       btnInstall.className = "pmk2-btn pmk2-btn-primary";
-      btnInstall.textContent = "安装/加载";
+      btnInstall.textContent = "Install / Load";
       btnInstall.onclick = async () => {
         btnInstall.disabled = true;
         const old = btnInstall.textContent;
-        btnInstall.textContent = "安装中...";
+        btnInstall.textContent = "Installing......";
 
         try {
-          await this.pluginManager.importFromGitHub(rawUrl);
-          alert(`已安装：${it.name}`);
-          this._refreshPluginsList();
+          await this.ExtensionManager.importFromGitHub(rawUrl);
+          alert(`Installed：${it.name}`);
+          this._refreshExtensionsList();
         } catch (e) {
-          alert(`安装失败：${e.message || e}`);
+          alert(`Installation Failed：${e.message || e}`);
         } finally {
           btnInstall.disabled = false;
           btnInstall.textContent = old;
@@ -2381,12 +2381,12 @@ class GitHubPanelExtension {
 
       const btnView = document.createElement("button");
       btnView.className = "pmk2-btn";
-      btnView.textContent = "查看源码";
+      btnView.textContent = "View Source Code";
       btnView.onclick = () => window.open(webUrl, "_blank");
 
       const btnCopy = document.createElement("button");
       btnCopy.className = "pmk2-btn pmk2-btn-blue";
-      btnCopy.textContent = "复制 Raw 链接";
+      btnCopy.textContent = "Copy Raw Link";
       btnCopy.onclick = () => Utils.copyToClipboard(rawUrl);
 
       btns.appendChild(btnInstall);
@@ -2403,7 +2403,7 @@ class GitHubPanelExtension {
 
   // ==================== 原有 UI 组件构建 ====================
 
-  _createPluginsArea() {
+  _createExtensionsArea() {
     const area = document.createElement('div');
     area.style.display = 'none';
     area.style.maxHeight = '260px';
@@ -2435,11 +2435,11 @@ class GitHubPanelExtension {
         if (inp.files[0]) {
           const text = await inp.files[0].text();
           try {
-            await this.pluginManager.loadPlugin(text);
-            alert('插件导入成功');
-            this._refreshPluginsList();
+            await this.ExtensionManager.loadExtension(text);
+            alert('Plugin imported successfully.');
+            this._refreshExtensionsList();
           } catch (e) {
-            alert('插件导入失败: ' + e.message);
+            alert('Plugin Import Failed: ' + e.message);
           }
         }
       };
@@ -2452,11 +2452,11 @@ class GitHubPanelExtension {
     const importGhBtn = UIComponents.createWindowButton('从 GitHub 导入');
     importGhBtn.onclick = async () => {
       try {
-        await this.pluginManager.importFromGitHub(ghInput.value);
+        await this.ExtensionManager.importFromGitHub(ghInput.value);
         alert('插件导入成功');
-        this._refreshPluginsList();
+        this._refreshExtensionsList();
       } catch (e) {
-        alert('导入失败: ' + e.message);
+        alert('Import Failed: ' + e.message);
       }
     };
 
@@ -2473,7 +2473,7 @@ class GitHubPanelExtension {
       gap: '8px'
     });
     const pasteLabel = document.createElement('div');
-    pasteLabel.textContent = '或粘贴插件代码:';
+    pasteLabel.textContent = 'Or paste the plugin code.:';
     pasteLabel.style.fontSize = '12px';
     pasteLabel.style.opacity = '0.7';
     const pasteTextarea = document.createElement('textarea');
@@ -2494,21 +2494,21 @@ class GitHubPanelExtension {
     const apiHint = document.createElement('div');
     apiHint.style.fontSize = '11px';
     apiHint.style.opacity = '0.65';
-    apiHint.innerHTML = `插件参数写法示例：<br><code>plugin.API = ["string:a","count:b","silder(1-100):c","choose(1,2,3):d"];</code><br>说明：a=字符串，b=数值，c=滑块，d=选择项。`;
+    apiHint.innerHTML = `Plugin Parameter Syntax Examples：<br><code>Extension.API = ["string:a","count:b","silder(1-100):c","choose(1,2,3):d"];</code><br>说明：a=字符串，b=数值，c=滑块，d=选择项。`;
 
     const loadPasteBtn = UIComponents.createWindowButton('加载粘贴的代码', {
       background: '#28a745'
     });
     loadPasteBtn.onclick = async () => {
       const code = pasteTextarea.value.trim();
-      if (!code) return alert('请先粘贴插件代码');
+      if (!code) return alert('Please paste the plugin code first.');
       try {
-        await this.pluginManager.loadPlugin(code);
-        alert('插件加载成功');
+        await this.ExtensionManager.loadExtension(code);
+        alert('Plugin loaded successfully.');
         pasteTextarea.value = '';
-        this._refreshPluginsList();
+        this._refreshExtensionsList();
       } catch (e) {
-        alert('插件加载失败: ' + e.message);
+        alert('Plugin failed to load.: ' + e.message);
       }
     };
     pasteBox.appendChild(pasteLabel);
@@ -2528,31 +2528,31 @@ class GitHubPanelExtension {
       overflowY: 'auto'
     });
     list.classList.add('gpp-scrollable');
-    this.ui.pluginsList = list;
+    this.ui.ExtensionsList = list;
     area.appendChild(list);
 
     return area;
   }
 
-  _renderPluginSettings(plugin, parent) {
-    const schema = plugin._settingsSchema || [];
+  _renderExtensionSettings(Extension, parent) {
+    const schema = Extension._settingsSchema || [];
     if (!schema.length) return;
 
     const settingsWrap = document.createElement('div');
-    settingsWrap.className = 'gpp-plugin-settings';
+    settingsWrap.className = 'gpp-Extension-settings';
 
     const title = document.createElement('div');
     title.style.fontWeight = '700';
     title.style.fontSize = '12px';
     title.style.opacity = '0.9';
-    title.textContent = '参数设置';
+    title.textContent = 'Parameter Settings';
     settingsWrap.appendChild(title);
 
-    const values = this.pluginManager.getPluginSettings(plugin.id);
+    const values = this.ExtensionManager.getExtensionSettings(Extension.id);
 
     schema.forEach(item => {
       const row = document.createElement('div');
-      row.className = 'gpp-plugin-setting-row';
+      row.className = 'gpp-Extension-setting-row';
 
       const label = document.createElement('label');
       label.textContent = `${item.label || item.key} (${item.type})`;
@@ -2562,17 +2562,17 @@ class GitHubPanelExtension {
         const inp = document.createElement('input');
         inp.type = 'text';
         inp.value = values[item.key] ?? item.default ?? '';
-        inp.onchange = () => this.pluginManager.setPluginSetting(plugin.id, item.key, inp.value);
+        inp.onchange = () => this.ExtensionManager.setExtensionSetting(Extension.id, item.key, inp.value);
         row.appendChild(inp);
       } else if (item.type === 'number') {
         const inp = document.createElement('input');
         inp.type = 'number';
         inp.value = values[item.key] ?? item.default ?? 0;
-        inp.onchange = () => this.pluginManager.setPluginSetting(plugin.id, item.key, Number(inp.value || 0));
+        inp.onchange = () => this.ExtensionManager.setExtensionSetting(Extension.id, item.key, Number(inp.value || 0));
         row.appendChild(inp);
       } else if (item.type === 'slider') {
         const box = document.createElement('div');
-        box.className = 'gpp-plugin-setting-inline';
+        box.className = 'gpp-Extension-setting-inline';
 
         const inp = document.createElement('input');
         inp.type = 'range';
@@ -2587,7 +2587,7 @@ class GitHubPanelExtension {
 
         inp.oninput = () => {
           val.textContent = String(inp.value);
-          this.pluginManager.setPluginSetting(plugin.id, item.key, Number(inp.value));
+          this.ExtensionManager.setExtensionSetting(Extension.id, item.key, Number(inp.value));
         };
 
         box.appendChild(inp);
@@ -2602,7 +2602,7 @@ class GitHubPanelExtension {
           sel.appendChild(op);
         });
         sel.value = values[item.key] ?? item.default ?? '';
-        sel.onchange = () => this.pluginManager.setPluginSetting(plugin.id, item.key, sel.value);
+        sel.onchange = () => this.ExtensionManager.setExtensionSetting(Extension.id, item.key, sel.value);
         row.appendChild(sel);
       }
 
@@ -2612,18 +2612,18 @@ class GitHubPanelExtension {
     parent.appendChild(settingsWrap);
   }
 
-  _refreshPluginsList() {
-    if (!this.ui.pluginsList) return;
-    this.ui.pluginsList.innerHTML = '';
+  _refreshExtensionsList() {
+    if (!this.ui.ExtensionsList) return;
+    this.ui.ExtensionsList.innerHTML = '';
 
-    if (this.pluginManager.plugins.size === 0) {
-      this.ui.pluginsList.innerHTML = '<div style="opacity:0.6;text-align:center">暂无插件</div>';
+    if (this.ExtensionManager.Extensions.size === 0) {
+      this.ui.ExtensionsList.innerHTML = '<div style="opacity:0.6;text-align:center">暂无插件</div>';
       return;
     }
 
-    this.pluginManager.plugins.forEach((p, id) => {
+    this.ExtensionManager.Extensions.forEach((p, id) => {
       const row = document.createElement('div');
-      row.className = 'gpp-plugin-card';
+      row.className = 'gpp-Extension-card';
       row.style.display = 'flex';
       row.style.flexDirection = 'column';
       row.style.gap = '8px';
@@ -2648,25 +2648,25 @@ class GitHubPanelExtension {
       });
       copyBtn.onclick = () => {
         Utils.copyToClipboard(p.code);
-        alert('插件源码已复制！');
+        alert('Extension source code copied!');
       };
 
-      const callHookBtn = UIComponents.createWindowButton('触发测试Hook');
+      const callHookBtn = UIComponents.createWindowButton('Trigger Test Hook');
       callHookBtn.onclick = () => {
-        this.pluginManager.trigger('plugin:test', {
-          pluginId: id,
+        this.ExtensionManager.trigger('Extension:test', {
+          ExtensionId: id,
           time: Date.now()
         });
-        LoadingManager.setMessage(`已触发测试 Hook -> ${id}`);
+        LoadingManager.setMessage(`Trigger Test Hook -> ${id}`);
       };
 
       const delBtn = UIComponents.createWindowButton('卸载', {
         background: 'rgba(255,80,80,0.2)'
       });
       delBtn.onclick = () => {
-        if (confirm(`确定卸载插件 ${p.name}?`)) {
-          this.pluginManager.unloadPlugin(id);
-          this._refreshPluginsList();
+        if (confirm(`Confirm Uninstall Extension ${p.name}?`)) {
+          this.ExtensionManager.unloadExtension(id);
+          this._refreshExtensionsList();
         }
       };
 
@@ -2682,12 +2682,12 @@ class GitHubPanelExtension {
       desc.style.fontSize = '11px';
       desc.style.opacity = '0.72';
       const apiCount = (p._settingsSchema || []).length;
-      desc.textContent = `插件参数数量: ${apiCount}`;
+      desc.textContent = `Number of Extension Parameters: ${apiCount}`;
       row.appendChild(desc);
 
-      this._renderPluginSettings(p, row);
+      this._renderExtensionSettings(p, row);
 
-      this.ui.pluginsList.appendChild(row);
+      this.ui.ExtensionsList.appendChild(row);
     });
   }
 
@@ -3321,7 +3321,7 @@ class GitHubPanelExtension {
     this.ui.tabTrendingBtn.onclick = () => this._switchMode('trending');
     this.ui.tabMyBtn.onclick = () => this._switchMode('my');
     this.ui.tabAIBtn.onclick = () => this._switchMode('ai');
-    this.ui.tabPluginsBtn.onclick = () => this._switchMode('plugins');
+    this.ui.tabExtensionsBtn.onclick = () => this._switchMode('Extensions');
   }
 
   // ==================== 模式切换 ====================
@@ -3333,14 +3333,14 @@ class GitHubPanelExtension {
     const isAI = mode === 'ai';
     const isTrending = mode === 'trending';
     const isMy = mode === 'my';
-    const isPlugins = mode === 'plugins';
+    const isExtensions = mode === 'Extensions';
 
     this.ui.searchArea.style.display = isSearch ? 'block' : 'none';
     this.ui.browseArea.style.display = isBrowse ? 'block' : 'none';
     this.ui.aiArea.style.display = isAI ? 'block' : 'none';
     this.ui.trendingArea.style.display = isTrending ? 'block' : 'none';
     this.ui.myArea.style.display = isMy ? 'block' : 'none';
-    this.ui.pluginsArea.style.display = isPlugins ? 'block' : 'none';
+    this.ui.ExtensionsArea.style.display = isExtensions ? 'block' : 'none';
 
     this.ui.searchDirSelectWrap.style.display = isSearch ? 'flex' : 'none';
 
@@ -3349,7 +3349,7 @@ class GitHubPanelExtension {
     this.ui.tabTrendingBtn.style.background = isTrending ? 'rgba(255,255,255,0.25)' : '';
     this.ui.tabMyBtn.style.background = isMy ? 'rgba(255,255,255,0.25)' : '';
     this.ui.tabAIBtn.style.background = isAI ? 'rgba(255,255,255,0.25)' : '';
-    this.ui.tabPluginsBtn.style.background = isPlugins ? 'rgba(255,255,255,0.25)' : '';
+    this.ui.tabExtensionsBtn.style.background = isExtensions ? 'rgba(255,255,255,0.25)' : '';
 
     this.ui.mainArea.innerHTML = '';
     if (!isSearch && isBrowse) this._renderActionRow();
@@ -3367,12 +3367,12 @@ class GitHubPanelExtension {
       this._refreshAIConfigUI();
       this._renderAIOutput();
       this._renderAICacheInfo();
-    } else if (isPlugins) {
+    } else if (isExtensions) {
       LoadingManager.setMessage('插件管理');
-      this._refreshPluginsList();
+      this._refreshExtensionsList();
     }
 
-    this.pluginManager.trigger('mode:switch', mode);
+    this.ExtensionManager.trigger('mode:switch', mode);
   }
 
   _switchSearchDir(dir) {
@@ -3383,7 +3383,7 @@ class GitHubPanelExtension {
     this.ui._orgControls.style.display = dir === 'org' ? 'block' : 'none';
     this.ui.mainArea.innerHTML = '';
     LoadingManager.setMessage(`准备搜索 ${dir}`);
-    this.pluginManager.trigger('search:dir', dir);
+    this.ExtensionManager.trigger('search:dir', dir);
   }
 
   // ==================== 搜索功能 ====================
@@ -3530,7 +3530,7 @@ class GitHubPanelExtension {
       });
 
       this.ui.mainArea.appendChild(listContainer);
-      this.pluginManager.trigger('search:repos', data);
+      this.ExtensionManager.trigger('search:repos', data);
     } catch (e) {
       ErrorHandler.handle(e, '搜索仓库');
     }
@@ -3717,7 +3717,7 @@ class GitHubPanelExtension {
         this._loadFolderReadme(readmeItem.url);
       }
 
-      this.pluginManager.trigger('dir:load', {
+      this.ExtensionManager.trigger('dir:load', {
         path,
         items
       });
@@ -4005,7 +4005,7 @@ class GitHubPanelExtension {
       }
 
       LoadingManager.setMessage(`Read ${file.size} bytes.`);
-      this.pluginManager.trigger('file:open', {
+      this.ExtensionManager.trigger('file:open', {
         file,
         text
       });

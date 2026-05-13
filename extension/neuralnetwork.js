@@ -1,4 +1,4 @@
-//2.0优化界面，界面更加好看，增加拖动可视化面板的问题
+//2.0The problem of increasing the number of interfaces, increasing the number of interfaces, improving the visibility of the interface, and increasing the movement of the interface. Edited and translated by Gaia.
 class NeuralNetwork {
     constructor() {
         this.layers = [];
@@ -7,9 +7,9 @@ class NeuralNetwork {
     }
 
     addLayer(neuronCount) {
-        // 参数验证
+        // Sansaku testimonial
         if (typeof neuronCount !== 'number' || neuronCount <= 0 || !Number.isInteger(neuronCount)) {
-            console.error('无效的神经元数量:', neuronCount);
+            console.error('Ineffective quantity:', neuronCount);
               return;
           }
 
@@ -20,12 +20,12 @@ class NeuralNetwork {
             weights: []
         };
 
-        // 初始化偏置
+        // initial eccentricity
         for (let i = 0; i < neuronCount; i++) {
             layer.biases.push(Math.random() * 2 - 1);
         }
 
-        // 如果不是第一个层，初始化权重连接
+        // The first level, the first stage is important.
         if (this.layers.length > 0) {
             const prevLayer = this.layers[this.layers.length - 1];
             for (let i = 0; i < neuronCount; i++) {
@@ -2016,7 +2016,7 @@ class NeuralNetworkExtension {
     getInfo() {
         return {
             id: 'neuralnetwork',
-            name: '神经网络',
+            name: 'Neural Network',
             color1: '#00cc99',
             color2: '#00b386',
             color3: '#009973',
@@ -2024,7 +2024,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'createNetwork',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '创建神经网络 输入层:[INPUT] 隐藏层:[HIDDEN] 输出层:[OUTPUT]',
+                    text: 'Input layer:[INPUT] Output layer:[HIDDEN] Output layer:[OUTPUT]',
                     arguments: {
                         INPUT: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2043,7 +2043,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'addLayer',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '添加层 神经元数量:[COUNT]',
+                    text: 'Addition layer Sheet original quantity: [COUNT]',
                     arguments: {
                         COUNT: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2054,7 +2054,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'addNeuron',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '向第[LAYER]层添加神经元',
+                    text: 'Add neuron [LAYER]',
                     arguments: {
                         LAYER: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2065,7 +2065,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'removeNeuron',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '从第[LAYER]层删除神经元',
+                    text: 'Remove neuron [LAYER]',
                     arguments: {
                         LAYER: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2076,7 +2076,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'setNeuronBias',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '设置第[LAYER]层第[NEURON]个神经元的偏置为[VALUE]',
+                    text: 'Set the bias of [LAYER] layer [NEURON] to [VALUE]',
                     arguments: {
                         LAYER: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2095,7 +2095,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'getNeuronBias',
                     blockType: Scratch.BlockType.REPORTER,
-                    text: '第[LAYER]层第[NEURON]个神经元的偏置',
+                    text: 'Get the [LAYER] bias of [NEURON]',
                     arguments: {
                         LAYER: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2110,7 +2110,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'setWeight',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '设置第[LAYER]层第[NEURON]个神经元的第[WEIGHT]个权重为[VALUE]',
+                    text: 'Set the [WEIGHT] of neuron in the [LAYER] layer to [VALUE].',
                     arguments: {
                         LAYER: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2133,7 +2133,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'getWeight',
                     blockType: Scratch.BlockType.REPORTER,
-                    text: '第[LAYER]层第[NEURON]个神经元的第[WEIGHT]个权重',
+                    text: 'Get the [WEIGHT] of [NEURON].',
                     arguments: {
                         LAYER: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2152,7 +2152,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'setLearningRate',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '设置学习率为[RATE]',
+                    text: 'Learning [RATE]',
                     arguments: {
                         RATE: {
                             type: Scratch.ArgumentType.NUMBER,
@@ -2163,7 +2163,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'trainNetwork',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '训练网络 输入:[INPUTS] 目标:[TARGETS]',
+                    text: 'Training network input :[INPUTS] Target:[TARGETS]',
                     arguments: {
                         INPUTS: {
                             type: Scratch.ArgumentType.STRING,
@@ -2178,17 +2178,17 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'showVisualization',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '显示训练可视化'
+                    text: 'Display training visualization'
                 },
                 {
                     opcode: 'updateVisualization',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: '更新训练可视化'
+                    text: 'Update training visualization'
                 },
                 {
                     opcode: 'getOutput',
                     blockType: Scratch.BlockType.REPORTER,
-                    text: '网络对输入[INPUTS]的输出',
+                    text: 'The network outputs the input [INPUTS]',
                     arguments: {
                         INPUTS: {
                             type: Scratch.ArgumentType.STRING,
@@ -2199,7 +2199,7 @@ class NeuralNetworkExtension {
                 {
                     opcode: 'getStructure',
                     blockType: Scratch.BlockType.REPORTER,
-                    text: '网络结构'
+                    text: 'Get Network Structure'
                 }
             ]
         };
@@ -2227,7 +2227,7 @@ class NeuralNetworkExtension {
                 this.updateVisualization();
             }
         } catch (error) {
-            console.error('创建网络时出错:', error);
+            console.error('Error creating network:', error);
         }
     }
     
@@ -2247,7 +2247,7 @@ class NeuralNetworkExtension {
                 }
             }
         } catch (error) {
-            console.error('添加层时出错:', error);
+            console.error('Error adding layer:', error);
         }
     }
     
@@ -2267,7 +2267,7 @@ class NeuralNetworkExtension {
                 }
             }
         } catch (error) {
-            console.error('添加神经元时出错:', error);
+            console.error('Error adding neurons:', error);
         }
     }
     
@@ -2287,7 +2287,7 @@ class NeuralNetworkExtension {
                 }
             }
         } catch (error) {
-            console.error('删除神经元时出错:', error);
+            console.error('Error deleting neuron:', error);
         }
     }
     
@@ -2309,7 +2309,7 @@ class NeuralNetworkExtension {
                 }
             }
         } catch (error) {
-            console.error('设置神经元偏置时出错:', error);
+            console.error('An error occurred while setting neuron bias.:', error);
         }
     }
     
@@ -2323,8 +2323,8 @@ class NeuralNetworkExtension {
             }
             return '无网络';
         } catch (error) {
-            console.error('获取神经元偏置时出错:', error);
-            return '错误';
+            console.error('Error obtaining neuron bias:', error);
+            return 'error';
         }
     }
     
@@ -2347,7 +2347,7 @@ class NeuralNetworkExtension {
                 }
             }
         } catch (error) {
-            console.error('设置权重时出错:', error);
+            console.error('Error setting weights:', error);
         }
     }
     
@@ -2362,8 +2362,8 @@ class NeuralNetworkExtension {
             }
             return '无网络';
         } catch (error) {
-            console.error('获取权重时出错:', error);
-            return '错误';
+            console.error('Error retrieving weights:', error);
+            return 'error';
         }
     }
     
@@ -2383,7 +2383,7 @@ class NeuralNetworkExtension {
                 }
             }
         } catch (error) {
-            console.error('设置学习率时出错:', error);
+            console.error('Error setting learning rate:', error);
         }
     }
     
@@ -2403,7 +2403,7 @@ class NeuralNetworkExtension {
                 
                 // 验证输入数据有效性
                 if (inputs.length === 0 || targets.length === 0) {
-                    console.error('无效的输入或目标数据');
+                    console.error('Invalid input or target data');
                     return;
                 }
                 
@@ -2418,7 +2418,7 @@ class NeuralNetworkExtension {
                 // return error; // 命令积木不应该返回值
             }
         } catch (error) {
-            console.error('训练网络时出错:', error);
+            console.error('Error during network training:', error);
         }
     }
     
@@ -2429,7 +2429,7 @@ class NeuralNetworkExtension {
                 this.updateVisualization();
             }
         } catch (error) {
-            console.error('显示可视化时出错:', error);
+            console.error('An error occurred while displaying visualizations.:', error);
         }
     }
     
@@ -2443,7 +2443,7 @@ class NeuralNetworkExtension {
                 }
             }
         } catch (error) {
-            console.error('更新可视化时出错:', error);
+            console.error('Error updating visualization:', error);
         }
     }
     
@@ -2457,16 +2457,16 @@ class NeuralNetworkExtension {
                 }).filter(val => !isNaN(val));
                 
                 if (inputs.length === 0) {
-                    return '无效输入';
+                    return 'Invalid input';
                 }
                 
                 const outputs = this.network.feedForward(inputs);
-                return outputs.length > 0 ? outputs.join(',') : '错误';
+                return outputs.length > 0 ? outputs.join(',') : 'error';
             }
-            return '无网络';
+            return 'No network';
         } catch (error) {
-            console.error('获取输出时出错:', error);
-            return '错误';
+            console.error('Error getting output:', error);
+            return 'error';
         }
     }
     
@@ -2482,7 +2482,7 @@ class NeuralNetworkExtension {
             }
             return '[]';
         } catch (error) {
-            console.error('获取网络结构时出错:', error);
+            console.error('Error obtaining network structure:', error);
             return '[]';
         }
     }
@@ -2490,30 +2490,30 @@ class NeuralNetworkExtension {
 
 // 创建一个全面的测试函数
 function runComprehensiveTests() {
-    console.log('=== 开始神经网络扩展全面测试 ===');
+    console.log('=== Start comprehensive testing of neural network extensions ===');
     let allTestsPassed = true;
     const testResults = [];
     
     try {
         // 测试1: 网络创建和结构验证
-        console.log('\n测试1: 网络创建和结构验证');
+        console.log('\nTest 1: Network Creation and Structure Verification');
         const testExtension = new NeuralNetworkExtension();
         testExtension.createNetwork({INPUT: 2, HIDDEN: 2, OUTPUT: 1});
         const structure = testExtension.getStructure();
         const expectedStructure = '[2,2,1]';
         const test1Passed = structure === expectedStructure;
-        testResults.push({name: '网络创建和结构验证', passed: test1Passed});
-        console.log(`  结果: ${test1Passed ? '通过' : '失败'} (期望: ${expectedStructure}, 得到: ${structure})`);
+        testResults.push({name: 'Network Creation and Structure Verification', passed: test1Passed});
+        console.log(`  result: ${test1Passed ? 'pass' : 'fail'} (Output: ${expectedStructure}, get: ${structure})`);
         
         // 测试2: 前馈计算测试
-        console.log('\n测试2: 前馈计算测试');
+        console.log('\nTest 2: Feedforward Calculation Test');
         const output = testExtension.getOutput({INPUTS: '0.5,0.5'});
         const test2Passed = output !== '' && !isNaN(parseFloat(output));
-        testResults.push({name: '前馈计算测试', passed: test2Passed});
-        console.log(`  结果: ${test2Passed ? '通过' : '失败'} (输出: ${output})`);
+        testResults.push({name: 'Feedforward Calculation Test', passed: test2Passed});
+        console.log(`  result: ${test2Passed ? 'pass' : 'fail'} (Output: ${output})`);
         
         // 测试3: 训练功能测试
-        console.log('\n测试3: 训练功能测试');
+        console.log('\nTest 3: Training Function Test');
         // 首先保存初始权重
         const initialWeight = testExtension.getWeight({LAYER: 2, NEURON: 1, WEIGHT: 1});
         // 进行训练
@@ -2521,47 +2521,47 @@ function runComprehensiveTests() {
         // 获取训练后权重
         const trainedWeight = testExtension.getWeight({LAYER: 2, NEURON: 1, WEIGHT: 1});
         const test3Passed = initialWeight !== trainedWeight;
-        testResults.push({name: '训练功能测试', passed: test3Passed});
-        console.log(`  结果: ${test3Passed ? '通过' : '失败'} (权重更新: ${initialWeight !== trainedWeight})`);
+        testResults.push({name: 'Training Function Test', passed: test3Passed});
+        console.log(`  result: ${test3Passed ? 'pass' : 'fail'} (Output: ${initialWeight !== trainedWeight})`);
         
         // 测试4: 参数设置和获取测试
-        console.log('\n测试4: 参数设置和获取测试');
+        console.log('\nTest 4: Parameter setting and retrieval test');
         testExtension.setLearningRate({RATE: 0.3});
-        // 通过创建新网络间接测试学习率设置是否生效
+        // Whether the indirect test learning rate setting is effective by creating a new network.
         testExtension.createNetwork({INPUT: 2, HIDDEN: 2, OUTPUT: 1});
-        // 训练相同的数据，查看是否有不同的学习效果
+        // Train on the same data and see if there are different learning outcomes.
         const weight1 = testExtension.getWeight({LAYER: 2, NEURON: 1, WEIGHT: 1});
         testExtension.trainNetwork({INPUTS: '0.5,0.5', TARGETS: '1'});
         const weight2 = testExtension.getWeight({LAYER: 2, NEURON: 1, WEIGHT: 1});
         const test4Passed = weight1 !== weight2;
-        testResults.push({name: '参数设置和获取测试', passed: test4Passed});
-        console.log(`  结果: ${test4Passed ? '通过' : '失败'} (学习率设置生效)`);
+        testResults.push({name: 'Parameter setting and retrieval test', passed: test4Passed});
+        console.log(`  result: ${test4Passed ? 'pass' : 'fail'} (Learning rate setting in effect)`);
         
-        // 测试5: 网络结构修改测试
-        console.log('\n测试5: 网络结构修改测试');
+        // Test5: Network structure modificationTest
+        console.log('\nTest 5: Network structure modificationTest');
         testExtension.addNeuron({LAYER: 2});
         const newStructure = testExtension.getStructure();
         const expectedNewStructure = '[2,3,1]';
         const test5Passed = newStructure === expectedNewStructure;
-        testResults.push({name: '网络结构修改测试', passed: test5Passed});
-        console.log(`  结果: ${test5Passed ? '通过' : '失败'} (期望: ${expectedNewStructure}, 得到: ${newStructure})`);
+        testResults.push({name: 'Network structure modificationTest', passed: test5Passed});
+        console.log(`  result: ${test5Passed ? 'pass' : 'fail'} (Output: ${expectedNewStructure}, Get: ${newStructure})`);
         
-        // 测试6: 错误处理测试 - 无效输入
-        console.log('\n测试6: 错误处理测试 - 无效输入');
+        // Test6: Error handling - 无效输入
+        console.log('\nTest6: Error handling - Invalid input');
         try {
             testExtension.trainNetwork({INPUTS: 'invalid,data', TARGETS: '1'});
-            // 应该能够安全处理无效输入
+            // It should be able to be handled safely. Invalid input
             const test6Passed = true;
-            testResults.push({name: '错误处理测试 - 无效输入', passed: test6Passed});
-            console.log(`  结果: 通过 (成功处理无效输入)`);
+            testResults.push({name: 'Error handling - Invalid input', passed: test6Passed});
+            console.log(`  result: pass (Successfully processed Invalid input)`);
         } catch (e) {
             const test6Passed = false;
-            testResults.push({name: '错误处理测试 - 无效输入', passed: test6Passed});
-            console.log(`  结果: 失败 (无法处理无效输入: ${e.message})`);
+            testResults.push({name: 'Error handling - Invalid input', passed: test6Passed});
+            console.log(`  result: fail (Unable to process.Invalid input: ${e.message})`);
         }
         
-        // 测试7: 性能优化测试 - 验证设备性能检测
-        console.log('\n测试7: 性能优化测试 - 验证设备性能检测');
+        // Test7: Performance Optimization Test - Verification equipment performance testing
+        console.log('\nTest7: Performance Optimization Test - Verification equipment performance testing');
         try {
             // 创建局部变量来模拟性能设置，避免直接依赖window对象
             let testDevicePerformanceLevel;
@@ -2583,27 +2583,27 @@ function runComprehensiveTests() {
             
             const test7Passed = lowPerfParams.maxParticles < mediumPerfParams.maxParticles && 
                                 mediumPerfParams.maxParticles < highPerfParams.maxParticles;
-            testResults.push({name: '性能优化测试', passed: test7Passed});
-            console.log(`  结果: ${test7Passed ? '通过' : '失败'} (性能参数正确分级)`);
+            testResults.push({name: 'Performance Optimization Test', passed: test7Passed});
+            console.log(`  result: ${test7Passed ? 'pass' : 'fail'} (Correctly classify performance parameters)`);
         } catch (e) {
-            // 如果在非浏览器环境中无法设置window对象，我们仍然认为测试通过，因为这只是环境差异
-            testResults.push({name: '性能优化测试', passed: true});
-            console.log(`  结果: 通过 (在非浏览器环境中，测试自动通过)`);
+            // 如果在非浏览器环境中无法设置window对象，我们仍然认为Testpass，因为这只是环境差异
+            testResults.push({name: 'Performance Optimization Test', passed: true});
+            console.log(`  result: pass (In a non-browser environment, Test automatically passes.)`);
         }
         
-        // 打印最终结果
-        console.log('\n=== 测试总结 ===');
+        // 打印最终result
+        console.log('\n=== Test Summary ===');
         testResults.forEach(result => {
-            console.log(`${result.name}: ${result.passed ? '通过' : '失败'}`);
+            console.log(`${result.name}: ${result.passed ? 'pass' : 'fail'}`);
             if (!result.passed) allTestsPassed = false;
         });
         
-        console.log('\n=== 测试完成 ===');
-        console.log(`整体结果: ${allTestsPassed ? '全部通过' : '部分失败'}`);
+        console.log('\n=== Test complete. ===');
+        console.log(`Overall result: ${allTestsPassed ? 'All passed' : 'Partial failure'}`);
         
         return allTestsPassed;
     } catch (error) {
-        console.error('测试执行过程中出错:', error);
+        console.error('Test执行过程中出错:', error);
         return false;
     }
 }
@@ -2617,7 +2617,7 @@ if (typeof Scratch === 'undefined') {
     const Scratch = {
         extensions: {
             register: function(extension) {
-                console.log('神经网络扩展已注册（模拟环境）');
+                console.log('Neural network extensions have been registered (simulation environment)');
             }
         },
         BlockType: {
@@ -2635,30 +2635,30 @@ if (typeof Scratch === 'undefined') {
     neuralNetwork = extension;
     Scratch.extensions.register(extension);
     
-    // 运行全面测试
-    console.log('\n运行神经网络扩展全面测试...');
+    // 运行全面Test
+    console.log('\nRunning neural network extensions for comprehensive testing...');
     const testsPassed = runComprehensiveTests();
     
     if (testsPassed) {
-        console.log('\n所有测试通过！执行XOR训练示例...');
+        console.log('\nAll tests passed! Execute XOR training example...');
         
-        // 测试神经网络
-        console.log('测试神经网络...');
+        // Test神经网络
+        console.log('Test Neural Network...');
         extension.createNetwork({INPUT: 2, HIDDEN: 2, OUTPUT: 1});
-        console.log('初始结构:', extension.getStructure());
+        console.log('Initial structure:', extension.getStructure());
         
         extension.addNeuron({LAYER: 2});
-        console.log('添加神经元后:', extension.getStructure());
+        console.log('After adding neurons:', extension.getStructure());
         
         extension.setLearningRate({RATE: 0.3});
         // 仅在浏览器环境下显示可视化
         if (isBrowser) {
             extension.showVisualization();
         } else {
-            console.log('在Node.js环境中运行，跳过可视化面板显示');
+            console.log('When running in a Node.js environment, skip the visualization panel display.');
         }
         
-        console.log('\n训练XOR...');
+        console.log('\nTraining XOR...');
         const trainingData = [
             {inputs: [0, 0], targets: [0]},
             {inputs: [0, 1], targets: [1]},
@@ -2674,22 +2674,22 @@ if (typeof Scratch === 'undefined') {
             });
             
             if (i % 1000 === 0) {
-                // 获取当前误差（通过获取最后一次训练历史）
+                // 获取当前误差（pass获取最后一次训练历史）
                 const history = neuralNetwork.getTrainingHistory();
-                console.log(`训练次数: ${i}, 误差: ${history[history.length - 1].toFixed(6)}`);
+                console.log(`Training times: ${i}, error: ${history[history.length - 1].toFixed(6)}`);
             }
         }
         
-        console.log('\n测试结果:');
+        console.log('\nTest result:');
         console.log('0,0 ->', extension.getOutput({INPUTS: '0,0'}));
         console.log('0,1 ->', extension.getOutput({INPUTS: '0,1'}));
         console.log('1,0 ->', extension.getOutput({INPUTS: '1,0'}));
         console.log('1,1 ->', extension.getOutput({INPUTS: '1,1'}));
     } else {
-        console.log('\n测试未通过！请检查扩展功能是否正常工作。');
+        console.log('\nTest failed! Please check if the extended functionality is working properly.');
     }
 } else {
-    // 在Scratch环境中注册扩展并设置全局变量
+    // Register extensions and set global variables in the Scratch environment.
     const extension = new NeuralNetworkExtension();
     neuralNetwork = extension;
     Scratch.extensions.register(extension);

@@ -3,34 +3,34 @@
 // 使用 Hugging Face Transformers.js 3.8.1
 
 (function(ext) {
-    // 清理函数，用于扩展卸载
+    // Cleanup functions are used to extend uninstallation.
     ext._shutdown = function() {};
     
-    // 扩展状态报告
+    // Extended Status Report
     ext._getStatus = function() {
         return { status: 2, msg: 'Ready' };
     };
     
-    // ==================== 全局变量定义 ====================
+    // ==================== Global variable definition ====================
     
     // Transformers.js库引用
     let transformers = null;
     let isTransformersLoaded = false;
     let loadError = null;
     
-    // Pipeline存储（Pipeline ID到Pipeline对象的映射）
+    // Pipeline Storage (Mapping from Pipeline ID to Pipeline object)
     let pipelines = {};
     let nextPipelineId = 1;
     
-    // 模型存储（模型ID到模型对象的映射）
+    // Model storage (mapping from model ID to model object)
     let models = {};
     let nextModelId = 1;
     
-    // 分词器存储（分词器ID到分词器对象的映射）
+    // Tokenizer storage (mapping from tokenizer IDs to tokenizer objects)
     let tokenizers = {};
     let nextTokenizerId = 1;
     
-    // 处理器存储（处理器ID到处理器对象的映射）
+    // Processor storage (mapping from processor IDs to processor objects)
     let processors = {};
     let nextProcessorId = 1;
     
@@ -45,9 +45,9 @@
     function safeStringify(value, space = 2) {
         return JSON.stringify(value, (key, val) => {
             if (typeof val === 'bigint') {
-                return val.toString(); // 将BigInt转换为字符串
+                return val.toString(); // Convert BigInt to string
             }
-            return val; // 其他类型保持不变
+            return val; // Other types remain unchanged.
         }, space);
     }
     
@@ -65,59 +65,59 @@
         }
         
         try {
-            console.log('开始加载Transformers.js v3.8.1...');
+            console.log('Start loading Transformers.js v3.8.1...');
             
-            // 使用ES模块动态导入Transformers.js
-            // Transformers.js 3.8.1 应该通过ES模块导入
+            // Dynamically import Transformers.js using ES modules.
+            // Transformers.js 3.8.1 It should be imported through an ES module.
             const module = await import('https://extensions.02engine.02studio.xyz/attachment/transformers.js');
             
-            // 检查关键API是否可用
+            // Check if the key APIs are available
             if (!module.pipeline) {
-                throw new Error('Transformers.js加载成功，但pipeline API未找到');
+                throw new Error('Transformers.js loaded successfully, but the pipeline API was not found.');
             }
             
-            // 设置transformers对象，包含所有需要的API
+            // Set up the transformers object, including all required APIs
             transformers = {
                 pipeline: module.pipeline,
                 env: module.env,
                 AutoModel: module.AutoModel,
                 AutoTokenizer: module.AutoTokenizer,
                 AutoProcessor: module.AutoProcessor,
-                // 其他可能的API
+                // Other possible APIs
                 AutoModelForSequenceClassification: module.AutoModelForSequenceClassification,
                 AutoModelForQuestionAnswering: module.AutoModelForQuestionAnswering,
                 AutoModelForCausalLM: module.AutoModelForCausalLM,
                 AutoModelForSeq2SeqLM: module.AutoModelForSeq2SeqLM,
                 AutoModelForTokenClassification: module.AutoModelForTokenClassification,
                 AutoModelForMaskedLM: module.AutoModelForMaskedLM,
-                // 工具函数
+                // Utility functions
                 tensor: module.tensor,
-                // 其他工具...
+                // Other tools...
             };
             
             isTransformersLoaded = true;
-            console.log('Transformers.js v3.8.1 加载成功');
+            console.log('Transformers.js v3.8.1 Loading successful');
             return transformers;
         } catch (error) {
             loadError = error;
-            console.error('加载Transformers.js失败:', error);
+            console.error('Failed to load Transformers.js:', error);
             
-            // 提供更详细的错误信息
+            // Provide more detailed error information
             if (error.toString().includes('Failed to fetch')) {
-                loadError = new Error('无法加载Transformers.js，请检查网络连接。错误: ' + error.message);
+                loadError = new Error('Unable to load Transformers.js. Please check your network connection. Error: ' + error.message);
             } else if (error.toString().includes('Unexpected token')) {
-                loadError = new Error('Transformers.js模块格式可能不正确，请确保使用正确的CDN链接。错误: ' + error.message);
+                loadError = new Error('The Transformers.js module may be incorrectly formatted. Please ensure you are using the correct CDN link. Error: ' + error.message);
             }
             
             throw loadError;
         }
     }
     
-    // ==================== 扩展描述符 ====================
+    // ==================== Extended descriptor ====================
     
     const descriptor = {
         blocks: [
-            // 状态检查积木块
+            // Status check blocks
             ['r', 'Transformers.js状态', 'getTransformersStatus'],
             
             // Pipeline相关积木块
